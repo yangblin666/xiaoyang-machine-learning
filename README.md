@@ -6,6 +6,12 @@
 
 如果这个项目对你有帮助，欢迎点一个 Star 多多支持，也欢迎继续补充案例、论文笔记、项目经验和学习心得。
 
+## 在线阅读
+
+点击访问：
+
+[https://xiaoyang-machine-learning.vercel.app](https://xiaoyang-machine-learning.vercel.app)
+
 ## 在线内容
 
 核心页面是：
