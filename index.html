@@ -1,0 +1,2157 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>小羊机器学习</title>
+  <meta name="description" content="小羊机器学习：面向广大学生和机器学习爱好者的机器学习、深度学习与现代 AI 交互式学习站。">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f3f0e6;
+      --paper: #fffdf6;
+      --paper-2: #ece8dc;
+      --ink: #2b2a24;
+      --muted: #6c675d;
+      --line: #d9d0bd;
+      --brand: #5f7c5b;
+      --brand-2: #426f74;
+      --accent: #a7633c;
+      --gold: #8c702f;
+      --blue: #4e6f8d;
+      --red: #a9474c;
+      --shadow: 0 12px 30px rgba(72, 61, 43, 0.10);
+      --radius: 8px;
+      --sidebar: 310px;
+      --content: 1020px;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      --sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+    }
+
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #151713;
+      --paper: #1d211b;
+      --paper-2: #27291f;
+      --ink: #f1eddf;
+      --muted: #bbb4a4;
+      --line: #423d30;
+      --brand: #a5c49b;
+      --brand-2: #9fc8ca;
+      --accent: #e0a071;
+      --gold: #d8bf78;
+      --blue: #a6bdd4;
+      --red: #e58a8f;
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.30);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.72;
+      letter-spacing: 0;
+    }
+
+    a {
+      color: var(--brand-2);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    button, input {
+      font: inherit;
+    }
+
+    .topbar {
+      display: none;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--paper) 92%, transparent);
+      backdrop-filter: blur(12px);
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: var(--sidebar) minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: auto;
+      padding: 22px 18px;
+      border-right: 1px solid var(--line);
+      background: color-mix(in srgb, var(--paper) 94%, var(--paper-2));
+    }
+
+    .brand {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 11px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper-2);
+      color: var(--brand);
+      font-weight: 800;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.15;
+    }
+
+    .brand p {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .toolbar {
+      display: grid;
+      gap: 9px;
+      margin-bottom: 16px;
+    }
+
+    .search {
+      width: 100%;
+      min-height: 40px;
+      padding: 9px 11px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    .icon-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .icon-btn {
+      min-height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    .icon-btn:hover {
+      border-color: var(--brand);
+      color: var(--brand);
+    }
+
+    .nav {
+      display: grid;
+      gap: 4px;
+      margin-top: 8px;
+    }
+
+    .nav a {
+      display: grid;
+      grid-template-columns: 30px 1fr;
+      align-items: center;
+      min-height: 38px;
+      padding: 6px 8px;
+      border-radius: 8px;
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .nav a:hover,
+    .nav a.active {
+      background: var(--paper-2);
+      color: var(--ink);
+    }
+
+    .nav .num {
+      color: var(--brand);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .main {
+      min-width: 0;
+      padding: 28px 28px 80px;
+    }
+
+    .content {
+      max-width: var(--content);
+      margin: 0 auto;
+    }
+
+    .chapter {
+      scroll-margin-top: 18px;
+      margin-bottom: 34px;
+      padding: 30px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .chapter-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .chapter h2 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.22;
+    }
+
+    .chapter-lead {
+      margin: 9px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .progress {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .progress input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--brand);
+    }
+
+    .hero {
+      display: grid;
+      gap: 20px;
+    }
+
+    .hero-title {
+      display: grid;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .hero-title h2 {
+      font-size: 42px;
+      max-width: 780px;
+    }
+
+    .tagline {
+      max-width: 780px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 4px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper-2);
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grid.cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid.cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid.cols-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .card,
+    .algo-card,
+    .scenario-card,
+    .week,
+    .question {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      padding: 16px;
+    }
+
+    .card.tint {
+      background: var(--paper-2);
+    }
+
+    .card h3,
+    .algo-card h3,
+    .scenario-card h3,
+    .week h3 {
+      margin: 0 0 8px;
+      font-size: 19px;
+      line-height: 1.32;
+    }
+
+    .lesson {
+      margin: 18px 0;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--paper) 78%, var(--paper-2));
+    }
+
+    .lesson h3 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      line-height: 1.3;
+    }
+
+    .lesson h4 {
+      margin: 16px 0 7px;
+      font-size: 17px;
+      color: var(--brand);
+    }
+
+    .lesson p {
+      margin: 0 0 11px;
+    }
+
+    .lesson ul,
+    .lesson ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+    }
+
+    .lesson li {
+      margin-bottom: 6px;
+    }
+
+    .card p,
+    .algo-card p,
+    .scenario-card p {
+      margin: 0 0 9px;
+    }
+
+    .kicker {
+      margin-bottom: 6px;
+      color: var(--brand);
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 15px 16px;
+      border-left: 4px solid var(--brand);
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--brand) 10%, var(--paper));
+    }
+
+    .callout strong {
+      color: var(--brand);
+    }
+
+    .callout.warn {
+      border-left-color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 10%, var(--paper));
+    }
+
+    .callout.research {
+      border-left-color: var(--blue);
+      background: color-mix(in srgb, var(--blue) 10%, var(--paper));
+    }
+
+    .formula {
+      overflow-x: auto;
+      margin: 10px 0;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #101916;
+      color: #d7f2e7;
+      font-family: var(--mono);
+      line-height: 1.6;
+    }
+
+    [data-theme="dark"] .formula {
+      background: #0a0f0d;
+    }
+
+    code {
+      padding: 0.1em 0.35em;
+      border-radius: 5px;
+      background: var(--paper-2);
+      font-family: var(--mono);
+      font-size: 0.92em;
+    }
+
+    .codebox {
+      position: relative;
+      margin: 14px 0;
+    }
+
+    pre {
+      overflow-x: auto;
+      margin: 0;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #111917;
+      color: #e8f5ee;
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 9px;
+      right: 9px;
+      min-height: 30px;
+      padding: 3px 9px;
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 7px;
+      background: rgba(255,255,255,0.08);
+      color: #e8f5ee;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .diagram {
+      margin: 18px 0;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper-2);
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .flow span {
+      display: grid;
+      place-items: center;
+      min-height: 68px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      text-align: center;
+      font-weight: 750;
+    }
+
+    .matrix {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 5px;
+      max-width: 360px;
+      margin: 12px auto;
+    }
+
+    .cell {
+      aspect-ratio: 1;
+      border-radius: 6px;
+      background: color-mix(in srgb, var(--brand) calc(var(--v) * 1%), var(--paper));
+      border: 1px solid color-mix(in srgb, var(--brand) 28%, var(--line));
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin: 14px 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+      background: var(--paper);
+    }
+
+    th,
+    td {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--paper-2);
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    details {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      margin: 10px 0;
+      padding: 0;
+    }
+
+    summary {
+      cursor: pointer;
+      padding: 13px 15px;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    details > div {
+      padding: 0 15px 15px;
+      color: var(--muted);
+    }
+
+    .algo-card {
+      display: grid;
+      gap: 12px;
+    }
+
+    .algo-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .mini {
+      padding: 10px;
+      border-radius: 8px;
+      background: var(--paper-2);
+    }
+
+    .mini b {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--brand);
+      font-size: 13px;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 10px;
+    }
+
+    .week {
+      display: grid;
+      grid-template-columns: 86px 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .week-num {
+      display: grid;
+      place-items: center;
+      min-height: 56px;
+      border-radius: 8px;
+      background: var(--paper-2);
+      color: var(--brand);
+      font-weight: 900;
+    }
+
+    .sources li {
+      margin-bottom: 8px;
+    }
+
+    .backtop {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 20;
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      color: var(--brand);
+      cursor: pointer;
+      box-shadow: var(--shadow);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 1080px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        display: flex;
+      }
+
+      .sidebar {
+        position: fixed;
+        inset: 56px auto 0 0;
+        z-index: 35;
+        width: min(88vw, 330px);
+        transform: translateX(-105%);
+        transition: transform 180ms ease;
+        box-shadow: var(--shadow);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main {
+        padding: 18px 14px 70px;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .chapter {
+        padding: 20px 16px;
+      }
+
+      .chapter-header,
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .hero-title h2 {
+        font-size: 32px;
+      }
+
+      .grid.cols-2,
+      .grid.cols-3,
+      .grid.cols-4,
+      .algo-meta,
+      .flow {
+        grid-template-columns: 1fr;
+      }
+
+      .week {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <button class="icon-btn" id="mobileMenu" aria-label="打开目录">目录</button>
+    <strong>小羊机器学习</strong>
+    <button class="icon-btn theme-toggle" aria-label="切换深浅色">◐</button>
+  </div>
+
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">ML</div>
+        <div>
+          <h1>小羊机器学习</h1>
+          <p>基础不跳过，现代不落后</p>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <input class="search" id="navSearch" type="search" placeholder="搜索章节或关键词">
+        <div class="icon-row">
+          <button class="icon-btn theme-toggle" title="切换深浅色">◐</button>
+          <button class="icon-btn" id="expandAll" title="展开问答">＋</button>
+          <button class="icon-btn" id="collapseAll" title="收起问答">－</button>
+        </div>
+      </div>
+
+      <nav class="nav" id="toc" aria-label="左侧目录">
+        <a href="#start"><span class="num">01</span><span>学习入口</span></a>
+        <a href="#sources"><span class="num">02</span><span>知识来源与方法</span></a>
+        <a href="#prep"><span class="num">03</span><span>学前准备</span></a>
+        <a href="#ml-basic"><span class="num">04</span><span>机器学习基础</span></a>
+        <a href="#classic"><span class="num">05</span><span>经典算法</span></a>
+        <a href="#dl-basic"><span class="num">06</span><span>深度学习基础</span></a>
+        <a href="#modern"><span class="num">07</span><span>现代 AI 模型</span></a>
+        <a href="#scenarios"><span class="num">08</span><span>实际需求地图</span></a>
+        <a href="#training"><span class="num">09</span><span>训练、调参、实验</span></a>
+        <a href="#research"><span class="num">10</span><span>科研启发</span></a>
+        <a href="#paper"><span class="num">11</span><span>论文阅读与写作</span></a>
+        <a href="#interview"><span class="num">12</span><span>大厂面试</span></a>
+        <a href="#projects"><span class="num">13</span><span>项目路线</span></a>
+        <a href="#plan"><span class="num">14</span><span>12 周计划</span></a>
+        <a href="#glossary"><span class="num">15</span><span>术语速查</span></a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <div class="content">
+        <section class="chapter hero" id="start" data-title="学习入口 小羊机器学习">
+          <div class="chapter-header">
+            <div class="hero-title">
+              <div class="kicker">研究生小白版 · 2026 语境</div>
+              <h2>小羊机器学习：从能听懂，到能做实验、读论文、讲项目</h2>
+              <p class="tagline">这不是背名词的页面。每个基础点都会回答：它现在是什么，为什么还用，能解决什么真实需求，怎样变成科研问题或面试项目。</p>
+              <div class="pill-row">
+                <span class="pill">建体系</span>
+                <span class="pill">会实验</span>
+                <span class="pill">能读论文</span>
+                <span class="pill">能讲项目</span>
+                <span class="pill">会选模型</span>
+                <span class="pill">开源学习</span>
+              </div>
+              <div class="callout">
+                <strong>开源说明：</strong>本项目面向广大学生、研究生和机器学习爱好者，用来系统学习机器学习、深度学习与现代 AI 实践。如果这个学习站对你有帮助，欢迎在 GitHub 点 Star 多多支持，也欢迎继续补充案例、错题、论文笔记和项目经验。
+              </div>
+            </div>
+            <label class="progress"><input type="checkbox" data-progress="start"> 已学</label>
+          </div>
+
+          <div class="two-col">
+            <div>
+              <div class="callout">
+                <strong>学习主线：</strong>先把机器学习看成一条闭环：数据进入模型，模型给出预测，损失函数衡量错了多少，优化器根据错误更新参数。后面的线性回归、神经网络、Transformer、RAG，本质上都在这条闭环上扩展。
+              </div>
+              <p>你可以把这页当成一张地图：第一遍只看直觉、例子和应用；第二遍补公式和代码；第三遍专门看科研启发、论文写法和面试题。基础部分一定要学，但我们不按“老教材怀旧模式”学，而是按今天的 AI 体系重新定位。</p>
+            </div>
+            <div class="diagram">
+              <div class="flow" aria-label="机器学习训练闭环">
+                <span>数据<br><small>样本、特征、标签</small></span>
+                <span>模型<br><small>规则的容器</small></span>
+                <span>预测<br><small>输出结果</small></span>
+                <span>损失<br><small>错了多少</small></span>
+                <span>更新<br><small>让下次更准</small></span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="chapter" id="sources" data-title="知识来源 学习方法 2026">
+          <div class="chapter-header">
+            <div>
+              <h2>02. 知识来源与学习方法</h2>
+              <p class="chapter-lead">2014 的经典课程能当骨架，但 2026 的学习必须补上现代模型、工具链、科研范式和产业需求。</p>
+            </div>
+            <label class="progress"><input type="checkbox" data-progress="sources"> 已学</label>
+          </div>
+
+          <div class="callout warn">
+            <strong>关键判断：</strong>基础不会过时，但讲法会过时。线性回归、逻辑回归、梯度下降、过拟合、偏差方差仍然是地基；Octave/Matlab 作为主实践工具、浅层网络作为终点、只看离线准确率，这些就明显不够了。
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>层级</th>
+                  <th>内容</th>
+                  <th>2026 学法</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>基础层</td>
+                  <td>线性代数、概率统计、损失函数、梯度下降、过拟合、偏差方差</td>
+                  <td>讲透直觉和公式，因为它们决定你能不能读懂论文、调好模型。</td>
+                </tr>
+                <tr>
+                  <td>经典算法层</td>
+                  <td>线性回归、逻辑回归、树模型、SVM、K-Means、PCA</td>
+                  <td>作为 baseline、可解释模型和表格数据方案学习，重点是适用边界。</td>
+                </tr>
+                <tr>
+                  <td>现代深度学习层</td>
+                  <td>CNN、RNN、Attention、Transformer、自监督学习、预训练、微调</td>
+                  <td>结合 PyTorch、论文结构和实验设计，不只背结构图。</td>
+                </tr>
+                <tr>
+                  <td>大模型应用层</td>
+                  <td>Embedding、RAG、Agent、LoRA/QLoRA、多模态、评测、部署</td>
+                  <td>按任务和成本选择方案，重视事实性、引用、延迟、安全和可维护性。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="grid cols-2">
+            <div class="card tint">
+              <h3>学习顺序</h3>
+              <p><b>第一遍：</b>看“是什么、为什么用、例子”。</p>
+              <p><b>第二遍：</b>补公式、代码和实验流程。</p>
+              <p><b>第三遍：</b>看科研启发、消融实验、面试表达。</p>
+            </div>
+            <div class="card tint">
+              <h3>参考策略</h3>
+              <p>吴恩达课程提供入门主线；CS229 补理论；scikit-learn 补传统机器学习工程；PyTorch 和 D2L 补深度学习实践；近年论文和行业案例补 RAG、Agent、多模态、评测与部署。</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="chapter" id="prep" data-title="学前准备 数学 Python PyTorch">
+          <div class="chapter-header">
+            <div>
+              <h2>03. 学前准备</h2>
+              <p class="chapter-lead">不要等数学“全会了”再开始。先知道每块数学在模型里负责什么，遇到问题再补。</p>
+            </div>
+            <label class="progress"><input type="checkbox" data-progress="prep"> 已学</label>
+          </div>
+
+          <div class="grid cols-3">
+            <div class="card">
+              <h3>线性代数</h3>
+              <p><b>现在是什么：</b>表示数据和模型参数的语言。Embedding 是向量，图片是张量，神经网络大多是矩阵乘法堆出来的。</p>
+              <p><b>为什么用：</b>没有矩阵思维，就很难理解批量训练、注意力矩阵、PCA 和神经网络参数。</p>
+            </div>
+            <div class="card">
+              <h3>概率统计</h3>
+              <p><b>现在是什么：</b>描述不确定性的语言。分类概率、贝叶斯方法、A/B 测试、置信区间、生成模型都离不开它。</p>
+              <p><b>为什么用：</b>科研和业务不只问“准不准”，还问“结果稳不稳、可信不可信”。</p>
+            </div>
+            <div class="card">
+              <h3>微积分与优化</h3>
+              <p><b>现在是什么：</b>模型学习的方向盘。反向传播把错误拆回每个参数，优化器决定怎么修。</p>
+              <p><b>为什么用：</b>学习率、梯度爆炸、AdamW、收敛曲线，本质都在优化里。</p>
+            </div>
+          </div>
+
+          <details open>
+            <summary>最小编程工具栈</summary>
+            <div>
+              <p><b>Python：</b>写实验脚本和数据处理。<b>NumPy：</b>理解数组和矩阵。<b>Pandas：</b>处理表格数据。<b>Matplotlib：</b>画 loss、指标和错例。<b>scikit-learn：</b>传统机器学习和评估。<b>PyTorch：</b>深度学习训练。<b>Jupyter：</b>探索和记录实验。</p>
+            </div>
+          </details>
+
+          <div class="lesson">
+            <h3>数学不用一次补完，但要知道它们分别在干什么</h3>
+            <p>机器学习里的数学不是为了炫技，而是为了让你知道模型为什么能学、为什么会错、为什么调参会有效。研究生小白最容易犯的错是：要么完全躲开公式，要么陷入数学细节不敢开始。正确方式是先掌握“够用的数学地图”。</p>
+            <h4>线性代数：数据的形状语言</h4>
+            <p>一条样本可以看成一个向量，一批样本可以看成一个矩阵，图片和视频可以看成更高维张量。神经网络里大量计算都是矩阵乘法：输入矩阵乘以权重矩阵，再加偏置，再过激活函数。Transformer 的注意力也可以看成矩阵之间的相似度计算。</p>
+            <p><b>你需要先会：</b>向量、矩阵乘法、转置、点积、范数、特征值/特征向量的直觉。PCA 为什么能降维，就是因为它在找数据变化最大的方向。</p>
+            <h4>概率统计：不确定性的语言</h4>
+            <p>模型输出 0.8，不是说“绝对正确”，而是说在模型看来属于这个类别的概率更高。最大似然、交叉熵、贝叶斯、置信区间、A/B 测试、概率校准，都来自概率统计。论文实验里只报告一次结果不够，因为训练有随机性，数据采样也有随机性。</p>
+            <p><b>你需要先会：</b>均值、方差、条件概率、贝叶斯公式、常见分布、最大似然、置信区间。它们能帮你判断结果是否稳定，提升是否显著。</p>
+            <h4>微积分：模型怎么知道往哪改</h4>
+            <p>导数描述“一个变量变一点，结果会怎么变”。机器学习里损失函数对参数求导，就是在问：这个参数往上调一点，错误会变大还是变小？链式法则是反向传播的核心，因为深度网络是一层套一层的复合函数。</p>
+            <p><b>你需要先会：</b>导数、偏导、梯度、链式法则。不要一开始追求推导所有复杂网络，只要先能看懂梯度下降为什么更新参数。</p>
+            <h4>优化：训练模型就是找一个足够好的低点</h4>
+            <p>训练模型可以想象成在山地里找低谷，低谷代表损失小。学习率太大可能一步跨过低谷，太小又走得太慢；模型太复杂可能在训练集低谷里陷得太深，到了真实数据就不好用。优化不只是数学问题，也和数据、模型结构、初始化、归一化、batch size 有关。</p>
+          </div>
+
+          <div class="codebox">
+            <pre><code class="language-python"># 一个最小机器学习实验的骨架
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+from sklearn.linear_model import LogisticRegression
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+model = LogisticRegression(max_iter=1000)
+model.fit(X_train, y_train)
+pred = model.predict(X_test)
+print("accuracy:", accuracy_score(y_test, pred))</code></pre>
+          </div>
+        </section>
+
+        <section class="chapter" id="ml-basic" data-title="机器学习基础 训练集 验证集 指标 过拟合">
+          <div class="chapter-header">
+            <div>
+              <h2>04. 机器学习基础</h2>
+              <p class="chapter-lead">机器学习不是让电脑“有灵感”，而是让电脑从数据中学出可泛化的规律。</p>
+            </div>
+            <label class="progress"><input type="checkbox" data-progress="ml-basic"> 已学</label>
+          </div>
+
+          <div class="grid cols-2">
+            <div class="card">
+              <h3>机器学习现在是什么</h3>
+              <p>它是从数据中学习函数的技术体系：输入是特征，输出是预测，训练目标是让预测在未知数据上也可靠。2026 年你看到的大模型、推荐系统、风控模型、视觉检测，本质都继承了这套“数据、模型、损失、优化、评估”的骨架。</p>
+            </div>
+            <div class="card">
+              <h3>为什么还要先学它</h3>
+              <p>因为论文实验、大厂面试和项目复盘都会回到底层问题：数据怎么划分，指标是否合理，是否过拟合，baseline 是什么，改进是否真的有效。不会基础，就只能调包，讲不清为什么。</p>
+            </div>
+          </div>
+
+          <details open>
+            <summary>训练集、验证集、测试集：像备考，但不能偷看答案</summary>
+            <div>
+              <p><b>训练集</b>像平时刷题，用来学习。<b>验证集</b>像模拟考试，用来选模型和调参数。<b>测试集</b>像正式考试，只能最后看一次。科研里如果反复拿测试集调模型，就等于把正式考试答案背熟了，论文结果会虚高。</p>
+            </div>
+          </details>
+
+          <details>
+            <summary>欠拟合、过拟合、泛化：裁缝做衣服的类比</summary>
+            <div>
+              <p>欠拟合像衣服做得太粗，谁穿都不合身；过拟合像只按一个人身材精修，换个人就不行；泛化能力就是这件衣服能适配新顾客的程度。深度学习和大模型微调也一样，训练集分数高不代表真实场景可靠。</p>
+            </div>
+          </details>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>指标</th>
+                  <th>适合任务</th>
+                  <th>真实需求提醒</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Accuracy</td>
+                  <td>类别均衡分类</td>
+                  <td>样本极不均衡时可能骗人，比如 99% 都是正常样本。</td>
+                </tr>
+                <tr>
+                  <td>Precision</td>
+                  <td>误报代价高</td>
+                  <td>垃圾邮件、风控拦截、医学阳性提醒都要看误报影响。</td>
+                </tr>
+                <tr>
+                  <td>Recall</td>
+                  <td>漏报代价高</td>
+                  <td>疾病筛查、故障预警、欺诈检测更怕漏掉真正风险。</td>
+                </tr>
+                <tr>
+                  <td>F1</td>
+                  <td>Precision 与 Recall 都重要</td>
+                  <td>适合类别不均衡的综合比较，但仍要结合业务代价。</td>
+                </tr>
+                <tr>
+                  <td>ROC-AUC / PR-AUC</td>
+                  <td>排序和阈值选择</td>
+                  <td>极度不均衡时 PR-AUC 往往比 ROC-AUC 更有信息量。</td>
+                </tr>
+                <tr>
+                  <td>MSE / MAE / RMSE</td>
+                  <td>回归</td>
+                  <td>MSE 更惩罚大错，MAE 更稳健，RMSE 单位和目标一致。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout research">
+            <strong>科研启发：</strong>如果同一个模型在 A 数据集很好、B 数据集很差，问题可能不是“模型不够大”，而是分布偏移、领域差异、标注噪声或指标不合适。这些都能发展成论文问题。
+          </div>
+
+          <div class="lesson">
+            <h3>把机器学习任务拆开看：先别急着选模型</h3>
+            <p>很多初学者一看到任务就问“用什么模型”，这一步太早。真正靠谱的顺序是：先定义任务，再看数据，再定指标，最后才选模型。比如“预测学生是否挂科”这个任务，如果学校最怕漏掉高风险学生，指标就不能只看 Accuracy，而应该重点看 Recall；如果误报会造成过度干预，就还要看 Precision。指标不同，模型选择和阈值都会变。</p>
+            <h4>1. 任务类型决定学习范式</h4>
+            <p><b>监督学习</b>有明确标签，适合分类、回归、排序。<b>无监督学习</b>没有标签，适合聚类、降维、异常发现。<b>自监督学习</b>把数据自己构造成训练信号，比如遮住一句话里的词让模型猜，或者让相似样本的向量更接近。<b>强化学习</b>关心动作、环境、奖励，更像训练一个会试错的策略。</p>
+            <h4>2. 特征不是越多越好</h4>
+            <p>特征是模型看世界的窗口。窗口太少，模型看不清；窗口太乱，模型会被噪声骗。科研里常见的失败是：模型看起来很复杂，但输入特征本身没有任务信息。业务里常见的失败是：训练时用了未来信息，形成数据泄漏，离线结果很好，线上一塌糊涂。</p>
+            <h4>3. 损失函数是“训练时的目标”，指标是“汇报时的目标”</h4>
+            <p>训练时模型通常优化一个可微的损失函数，例如交叉熵或 MSE；汇报时我们看 Accuracy、F1、AUC、MAE 等指标。二者不一定完全一致。比如推荐系统可能训练点击率，但业务更关心停留时长、转化率和长期留存；论文中如果只报告一个指标，结论可能很片面。</p>
+            <h4>4. 泛化是机器学习的灵魂</h4>
+            <p>模型不是为了记住训练集，而是为了在未知数据上表现好。泛化能力受数据量、模型复杂度、正则化、训练策略、数据分布和标签质量共同影响。你写论文时，主结果表只能说明“在这些数据和指标上有效”；如果想证明方法更有价值，就要加跨数据集、噪声、少样本、消融和效率分析。</p>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>真实问题</th>
+                  <th>机器学习表述</th>
+                  <th>首选指标</th>
+                  <th>容易踩坑</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>判断一张工业图片是否有缺陷</td>
+                  <td>二分类或异常检测</td>
+                  <td>Recall、Precision、F1</td>
+                  <td>缺陷样本少，准确率会虚高；漏检比误检更严重。</td>
+                </tr>
+                <tr>
+                  <td>预测明天某商品销量</td>
+                  <td>回归或时间序列预测</td>
+                  <td>MAE、RMSE、MAPE</td>
+                  <td>节假日、促销、库存等外部因素会造成分布变化。</td>
+                </tr>
+                <tr>
+                  <td>把论文按研究主题分组</td>
+                  <td>文本聚类或主题建模</td>
+                  <td>轮廓系数、人工一致性、下游检索效果</td>
+                  <td>没有标签时不能只看聚类图好不好看。</td>
+                </tr>
+                <tr>
+                  <td>企业文档问答</td>
+                  <td>检索增强生成</td>
+                  <td>检索召回、事实性、引用命中率</td>
+                  <td>生成流畅不等于正确，引用必须能对上原文。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="chapter" id="classic" data-title="经典机器学习算法 线性回归 逻辑回归 树模型 SVM PCA">
+          <div class="chapter-header">
+            <div>
+              <h2>05. 经典机器学习算法</h2>
+              <p class="chapter-lead">经典算法不是“旧东西”，而是 baseline、可解释性、表格数据、快速验证和面试表达的核心工具箱。</p>
+            </div>
+            <label class="progress"><input type="checkbox" data-progress="classic"> 已学</label>
+          </div>
+
+          <article class="algo-card">
+            <h3>线性回归 Linear Regression</h3>
+            <div class="algo-meta">
+              <div class="mini"><b>现在是什么</b>回归任务最小可解释 baseline，也是理解损失函数、梯度下降和特征贡献的入口。</div>
+              <div class="mini"><b>为什么用</b>简单、稳定、可解释；小数据、科研探索、业务汇报中很有价值。</div>
+              <div class="mini"><b>例子</b>用面积、地段、楼龄预测房价；用温度、湿度、负载预测能耗。</div>
+              <div class="mini"><b>科研启发</b>如果线性不够，可研究特征交互、非线性核、可解释回归和不确定性估计。</div>
+            </div>
+            <div class="formula">预测：ŷ = w₁x₁ + w₂x₂ + ... + b<br>损失：MSE = (1/n) Σ(yᵢ - ŷᵢ)²</div>
+          </article>
+
+          <article class="algo-card">
+            <h3>逻辑回归 Logistic Regression</h3>
+            <div class="algo-meta">
+              <div class="mini"><b>现在是什么</b>二分类 baseline、概率输出模型、可解释风控和广告预估的常用起点。</div>
+              <div class="mini"><b>为什么用</b>训练快、解释清楚，特征权重能告诉你哪些因素推高风险或点击概率。</div>
+              <div class="mini"><b>例子</b>判断邮件是否垃圾邮件；判断患者是否高风险；判断用户是否会点击广告。</div>
+              <div class="mini"><b>科研启发</b>可研究概率校准、类别不平衡、代价敏感学习和可解释特征选择。</div>
+            </div>
+            <div class="formula">p(y=1|x) = sigmoid(wᵀx + b) = 1 / (1 + e⁻ᶻ)</div>
+          </article>
+
+          <article class="algo-card">
+            <h3>K 近邻 KNN</h3>
+            <div class="algo-meta">
+              <div class="mini"><b>现在是什么</b>基于相似性的懒学习方法，也是理解检索、Embedding 近邻搜索的前置直觉。</div>
+              <div class="mini"><b>为什么用</b>简单直观，不需要训练复杂模型，适合小规模相似样本判断。</div>
+              <div class="mini"><b>例子</b>根据相似病例辅助诊断；根据相似用户推荐内容；用向量相似找相近论文。</div>
+              <div class="mini"><b>科研启发</b>距离度量学习、近邻检索加速、表征质量评估都是现代研究方向。</div>
+            </div>
+          </article>
+
+          <article class="algo-card">
+            <h3>朴素贝叶斯 Naive Bayes</h3>
+            <div class="algo-meta">
+              <div class="mini"><b>现在是什么</b>概率分类器，常作为文本分类和小数据任务 baseline。</div>
+              <div class="mini"><b>为什么用</b>快、稳、对高维稀疏文本友好。</div>
+              <div class="mini"><b>例子</b>垃圾邮件过滤、新闻主题分类、情感粗分类。</div>
+              <div class="mini"><b>科研启发</b>可讨论条件独立假设何时失效，如何引入特征依赖或不确定性估计。</div>
+            </div>
+          </article>
+
+          <article class="algo-card">
+            <h3>决策树 Decision Tree</h3>
+            <div class="algo-meta">
+              <div class="mini"><b>现在是什么</b>可解释规则模型，像一串“如果...那么...”的问题。</div>
+              <div class="mini"><b>为什么用</b>人能读懂，适合规则提取、风控解释、医学分诊等场景。</div>
+              <div class="mini"><b>例子</b>银行根据收入、负债、信用记录做贷款初筛；医生根据症状做分诊建议。</div>
+              <div class="mini"><b>科研启发</b>可研究可解释模型、人机协同决策、规则蒸馏。</div>
+            </div>
+          </article>
+
+          <article class="algo-card">
+            <h3>随机森林 Random Forest</h3>
+            <div class="algo-meta">
+              <div class="mini"><b>现在是什么</b>多棵决策树投票，降低单棵树过拟合和不稳定。</div>
+              <div class="mini"><b>为什么用</b>表格数据强、调参少、能看特征重要性。</div>
+              <div class="mini"><b>例子</b>用户流失预测、基因表达特征筛选、设备故障分类。</div>
+              <div class="mini"><b>科研启发</b>可研究特征重要性稳定性、小样本高维数据、可解释集成模型。</div>
+            </div>
+          </article>
+
+          <article class="algo-card">
+            <h3>GBDT / XGBoost / LightGBM</h3>
+            <div class="algo-meta">
+              <div class="mini"><b>现在是什么</b>结构化数据里非常强的生产级方案，Boosting 思想是不断修正前面模型的错误。</div>
+              <div class="mini"><b>为什么用</b>在很多表格业务数据上，比盲目使用深度模型更稳、更省、更容易解释。</div>
+              <div class="mini"><b>例子</b>风控评分、广告点击率预估、销量预测、Kaggle 表格竞赛。</div>
+              <div class="mini"><b>科研启发</b>排序损失、自定义目标函数、模型蒸馏、树模型与深度表征融合。</div>
+            </div>
+          </article>
+
+          <article class="algo-card">
+            <h3>支持向量机 SVM</h3>
+            <div class="algo-meta">
+              <div class="mini"><b>现在是什么</b>最大间隔分类器，在小样本、清晰边界和核方法场景仍有教学与实践价值。</div>
+              <div class="mini"><b>为什么用</b>理论漂亮，能用核函数处理非线性边界。</div>
+              <div class="mini"><b>例子</b>小样本文本分类、传统图像特征分类、科研数据初步分类。</div>
+              <div class="mini"><b>科研启发</b>核函数设计、小样本泛化、间隔理论和表示学习结合。</div>
+            </div>
+          </article>
+
+          <article class="algo-card">
+            <h3>K-Means 聚类</h3>
+            <div class="algo-meta">
+              <div class="mini"><b>现在是什么</b>无监督分组方法，也是理解聚类、原型、向量空间结构的入口。</div>
+              <div class="mini"><b>为什么用</b>快速探索数据结构，给用户、样本、论文或细胞分群。</div>
+              <div class="mini"><b>例子</b>用户分群、论文主题聚类、图像颜色压缩、异常模式发现。</div>
+              <div class="mini"><b>科研启发</b>聚类数选择、无监督评估、表示学习后的聚类、弱监督标注。</div>
+            </div>
+          </article>
+
+          <article class="algo-card">
+            <h3>PCA 主成分分析</h3>
+            <div class="algo-meta">
+              <div class="mini"><b>现在是什么</b>高维数据降维、可视化、压缩和去噪工具。</div>
+              <div class="mini"><b>为什么用</b>快速看数据主方向，减少维度，辅助解释变量结构。</div>
+              <div class="mini"><b>例子</b>基因表达数据可视化、传感器降噪、表格特征压缩。</div>
+              <div class="mini"><b>科研启发</b>低维流形、可解释降维、表征压缩、信息保留与任务性能的关系。</div>
+            </div>
+          </article>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>如果你的数据是...</th>
+                  <th>先试什么</th>
+                  <th>为什么</th>
+                  <th>不建议直接用什么</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>小样本、强解释需求</td>
+                  <td>线性/逻辑回归、决策树</td>
+                  <td>简单透明，便于讲清变量影响</td>
+                  <td>一上来就用大模型或复杂深网</td>
+                </tr>
+                <tr>
+                  <td>结构化表格数据</td>
+                  <td>LightGBM、XGBoost、随机森林</td>
+                  <td>对表格特征、缺失、非线性关系很友好</td>
+                  <td>没有强理由时盲目用 Transformer</td>
+                </tr>
+                <tr>
+                  <td>图片、局部纹理明显</td>
+                  <td>CNN、迁移学习、ViT baseline</td>
+                  <td>能学局部模式和层次特征</td>
+                  <td>只用手工特征和 SVM</td>
+                </tr>
+                <tr>
+                  <td>长文本或语义任务</td>
+                  <td>预训练语言模型、Embedding、RAG</td>
+                  <td>能利用语义表示和外部知识</td>
+                  <td>只用词频规则处理复杂语义</td>
+                </tr>
+                <tr>
+                  <td>无标签数据很多</td>
+                  <td>自监督、聚类、对比学习</td>
+                  <td>能先学表示，再迁移到下游任务</td>
+                  <td>只等人工标注完整再开始</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="lesson">
+            <h3>经典算法详细讲解：它们不是过时，而是承担不同角色</h3>
+            <p>深度学习和大模型很强，但现实任务并不是“越大越好”。表格数据、小样本、强解释、快速验证、论文 baseline、业务部署成本，都会让经典算法继续有用。你要学会的是：看到任务后判断这个算法是不是合适，而不是背一个算法排名。</p>
+
+            <h4>线性回归：最小但很重要的回归模型</h4>
+            <p>线性回归假设目标值可以由特征加权相加得到。它的直觉像“给每个因素打一个影响分”：面积每增加 1 平方米房价增加多少，楼龄每增加一年房价减少多少，距离地铁越近价格如何变化。它现在常作为回归 baseline、可解释分析和实验 sanity check。</p>
+            <p><b>什么时候用：</b>数据量不大、关系接近线性、需要解释变量影响、需要快速建立 baseline。<b>什么时候不用：</b>关系强非线性、特征交互复杂、异常值很多且没有处理。<b>科研启发：</b>可以研究非线性特征、鲁棒回归、不确定性估计和可解释性。</p>
+
+            <h4>逻辑回归：名字有回归，实际常做分类</h4>
+            <p>逻辑回归先做线性加权，再通过 sigmoid 把结果压到 0 到 1 之间，解释为“属于正类的概率”。它在 2026 年仍常用于风控、医疗风险、广告点击、用户流失等需要概率和解释的场景。它也是理解交叉熵、概率校准和分类阈值的好入口。</p>
+            <p><b>真实例子：</b>医院希望预测患者是否高风险，逻辑回归不仅给出概率，还能解释哪些指标提高风险。<b>边界：</b>如果类别边界很复杂，单纯逻辑回归可能不够；如果特征质量差，换大模型也救不了。<b>科研启发：</b>类别不平衡、代价敏感学习、概率校准、公平性分析。</p>
+
+            <h4>KNN：相似样本给你投票</h4>
+            <p>KNN 几乎不训练模型，而是在预测时找到最相似的 K 个样本，看它们的标签。它的价值不只是一个传统算法，更是现代向量检索和 RAG 的直觉来源：当文本、图片、用户、商品都变成 Embedding 后，“找相似向量”就是一种 KNN 思维。</p>
+            <p><b>真实例子：</b>论文助手根据向量相似度找到与当前论文最相近的研究；推荐系统根据相似用户或相似商品召回候选。<b>边界：</b>高维空间距离可能失效，大数据检索成本高，需要近似最近邻索引。<b>科研启发：</b>度量学习、向量索引、表征质量评估。</p>
+
+            <h4>决策树：把判断过程写成一棵问题树</h4>
+            <p>决策树像一套逐步提问的规则：收入是否大于某阈值？负债是否过高？历史是否违约？每次分裂都希望让子节点更“纯”。它最大的优点是可解释，缺点是单棵树容易过拟合，数据稍微变化树结构就可能变。</p>
+            <p><b>真实例子：</b>银行贷款初筛、医学分诊、设备故障规则解释。<b>边界：</b>不要把单棵树当作最强预测器，它更适合理解规则。<b>科研启发：</b>可解释规则、人机协同、从复杂模型蒸馏出规则树。</p>
+
+            <h4>随机森林：让很多棵树一起投票</h4>
+            <p>随机森林通过“样本随机 + 特征随机”训练多棵树，再投票或平均。单棵树像一个容易偏执的专家，森林像多个专家共同判断。它降低方差，通常比单棵树稳定，也能提供特征重要性。</p>
+            <p><b>真实例子：</b>基因表达数据中筛选重要基因，用户流失预测中解释哪些行为最关键。<b>边界：</b>模型比单棵树难解释，极高维稀疏文本上未必最好。<b>科研启发：</b>稳定性选择、特征重要性可信度、小样本高维建模。</p>
+
+            <h4>GBDT / XGBoost / LightGBM：结构化数据常胜将军</h4>
+            <p>Boosting 的核心是“不断补短板”：第一棵树犯错，第二棵树重点学它没学好的部分，后面的树继续修正。XGBoost 和 LightGBM 是工程化很强的 GBDT 变体，支持高效训练、正则化、缺失值处理和复杂特征关系。</p>
+            <p><b>真实例子：</b>广告点击率预估、信用评分、销量预测、表格竞赛。<b>为什么现在还用：</b>很多企业核心数据是表格，树模型训练快、解释成本低、上线稳定。<b>边界：</b>非结构化文本、图片、音频通常需要深度表示。<b>科研启发：</b>树模型与神经网络融合、排序损失、模型压缩、自动特征工程。</p>
+
+            <h4>SVM：最大间隔带来的泛化直觉</h4>
+            <p>SVM 希望找到一条分界线，不只是把样本分开，还要让分界线离两边样本尽可能远。这个“间隔越大越稳”的思想很重要。核函数让 SVM 能在高维空间处理非线性问题。</p>
+            <p><b>真实例子：</b>小样本文本分类、传统图像特征分类、科研数据初步建模。<b>边界：</b>大规模数据训练成本高，概率输出不如逻辑回归直接。<b>科研启发：</b>小样本泛化、核方法、间隔理论与深度表征结合。</p>
+
+            <h4>K-Means：用中心点理解群体结构</h4>
+            <p>K-Means 试图找到 K 个中心，让每个样本归到最近的中心。它很适合快速探索数据：用户是不是能分成几类？论文主题有没有自然分组？细胞表达是否出现不同亚群？</p>
+            <p><b>边界：</b>需要先定 K，对异常值敏感，适合球状簇，不适合复杂形状。<b>科研启发：</b>聚类数选择、无监督评价、深度聚类、用聚类辅助伪标签。</p>
+
+            <h4>PCA：找到数据变化最大的方向</h4>
+            <p>PCA 把高维数据投影到少数主成分上，希望保留尽可能多的信息。它不是万能降维，但非常适合探索：高维数据是否有明显结构？噪声是否集中在低方差方向？不同类别是否能在二维投影上分开？</p>
+            <p><b>真实例子：</b>基因表达可视化、传感器数据压缩、图像降噪、实验前的数据探索。<b>边界：</b>PCA 是线性的，复杂流形结构可能需要 t-SNE、UMAP 或深度表示。<b>科研启发：</b>表征压缩、可解释降维、信息保留与下游任务关系。</p>
+          </div>
+        </section>
+
+        <section class="chapter" id="dl-basic" data-title="深度学习基础 神经网络 反向传播 Adam Dropout BatchNorm">
+          <div class="chapter-header">
+            <div>
+              <h2>06. 深度学习基础</h2>
+              <p class="chapter-lead">深度学习把“人工设计特征”的一部分工作交给模型，让模型从数据中学出多层表示。</p>
+            </div>
+            <label class="progress"><input type="checkbox" data-progress="dl-basic"> 已学</label>
+          </div>
+
+          <div class="grid cols-3">
+            <div class="card">
+              <h3>神经元与层</h3>
+              <p>一个神经元做加权求和再过激活函数；一层神经元学一种变换；多层叠起来就能表达复杂关系。MLP 是深度学习的最小积木。</p>
+            </div>
+            <div class="card">
+              <h3>前向传播</h3>
+              <p>像流水线工厂：输入经过一层层加工，最后得到预测。每一层都把原始数据变成更适合任务的表示。</p>
+            </div>
+            <div class="card">
+              <h3>反向传播</h3>
+              <p>像根据最终误差追责：输出错了多少，会沿着计算图倒推到每个参数，告诉它应该往哪个方向改。</p>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>组件</th>
+                  <th>现在是什么</th>
+                  <th>为什么用</th>
+                  <th>常见坑</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>ReLU / GELU</td>
+                  <td>激活函数，让网络表达非线性</td>
+                  <td>没有激活，多层线性仍然等价于一层线性</td>
+                  <td>Sigmoid 深层网络容易梯度消失</td>
+                </tr>
+                <tr>
+                  <td>Cross Entropy</td>
+                  <td>分类任务核心损失</td>
+                  <td>鼓励正确类别概率更高</td>
+                  <td>标签错误和类别不均衡会影响训练</td>
+                </tr>
+                <tr>
+                  <td>Adam / AdamW</td>
+                  <td>常用优化器</td>
+                  <td>自适应学习率，训练更省心</td>
+                  <td>学习率过大仍会崩，权重衰减要分清 Adam 和 AdamW</td>
+                </tr>
+                <tr>
+                  <td>Dropout</td>
+                  <td>正则化方法</td>
+                  <td>让模型不要过度依赖某些神经元</td>
+                  <td>训练和推理行为不同，别忘了 eval 模式</td>
+                </tr>
+                <tr>
+                  <td>BatchNorm / LayerNorm</td>
+                  <td>归一化方法</td>
+                  <td>改善训练稳定性</td>
+                  <td>小 batch 下 BatchNorm 可能不稳；Transformer 常用 LayerNorm</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="lesson">
+            <h3>深度学习到底在学什么：从“人工特征”到“自动表征”</h3>
+            <p>传统机器学习常常依赖人设计特征：文本用词频，图片用边缘和纹理，用户用统计行为。深度学习的变化是：模型可以从原始或半原始数据中逐层学表示。低层学简单模式，高层学复杂语义。例如 CNN 低层可能学边缘，高层学病灶形状；语言模型低层学词法句法，高层学语义和任务模式。</p>
+            <h4>前向传播：把输入加工成预测</h4>
+            <p>前向传播就是从输入到输出的一次计算。图像进入 CNN 后变成特征图，文本进入 Transformer 后变成上下文相关向量，最后分类头或生成头给出预测。你可以把它看成一条加工流水线：每一层都在把信息变得更适合当前任务。</p>
+            <h4>损失函数：告诉模型错在哪里</h4>
+            <p>损失函数不是数学装饰，而是训练目标。分类用交叉熵，是因为我们希望正确类别概率更高；回归用 MSE，是因为我们希望预测值离真实值更近；对比学习用对比损失，是因为我们希望相似样本更近、不相似样本更远。论文中的“新损失”往往意味着作者重新定义了模型应该重视什么。</p>
+            <h4>反向传播：把错误分摊给每个参数</h4>
+            <p>模型输出错了，不能只说“最后一层负责”。反向传播会利用链式法则，把损失对每个参数的影响算出来。梯度为正或为负，表示参数增大会让损失怎么变；梯度大小表示影响强弱。优化器再根据这些梯度更新参数。</p>
+            <h4>优化器：怎么走下山路</h4>
+            <p>SGD 像每一步只看当前坡度，简单但可能抖；Momentum 会记住过去方向，像带惯性下山；Adam 为不同参数自适应调整步长，训练更省心；AdamW 把权重衰减处理得更合理，是很多 Transformer 和大模型微调常用选择。调参时，学习率通常比模型结构小改动更关键。</p>
+            <h4>正则化：让模型别把训练集背下来</h4>
+            <p>Dropout、Weight Decay、数据增强、Early Stopping 都是在减少过拟合。小数据论文尤其要重视正则化，因为模型很容易把训练集记住。真实项目里，如果训练集分数很高但线上差，先看数据泄漏和分布偏移，再看正则化是否足够。</p>
+          </div>
+
+          <div class="codebox">
+            <pre><code class="language-python"># PyTorch 训练循环的核心四步
+for x, y in dataloader:
+    pred = model(x)          # 1. 前向传播
+    loss = loss_fn(pred, y)  # 2. 计算损失
+    optimizer.zero_grad()
+    loss.backward()          # 3. 反向传播
+    optimizer.step()         # 4. 更新参数</code></pre>
+          </div>
+
+          <div class="callout research">
+            <strong>科研启发：</strong>损失函数不是附属品，而是研究目标的数学表达。你想要类别更准、排序更好、表示更接近、生成更真实，往往对应不同损失和训练策略。
+          </div>
+        </section>
+
+        <section class="chapter" id="modern" data-title="现代AI模型 CNN RNN Transformer RAG Agent LoRA 多模态 扩散模型">
+          <div class="chapter-header">
+            <div>
+              <h2>07. 现代 AI 模型</h2>
+              <p class="chapter-lead">现代 AI 的主线是表征学习、预训练、迁移、检索增强、工具调用和可靠评测。</p>
+            </div>
+            <label class="progress"><input type="checkbox" data-progress="modern"> 已学</label>
+          </div>
+
+          <div class="grid cols-2">
+            <div class="card">
+              <h3>CNN：会看局部模式的模型</h3>
+              <p><b>用处：</b>图像分类、缺陷检测、医学影像、遥感识别。</p>
+              <p><b>科研启发：</b>小样本视觉、跨设备泛化、可解释热力图、弱监督定位。</p>
+            </div>
+            <div class="card">
+              <h3>RNN / LSTM / GRU：早期序列建模工具</h3>
+              <p><b>用处：</b>时间序列、传感器状态、文本序列。</p>
+              <p><b>科研启发：</b>长依赖困难可引出 Attention、Transformer 或状态空间模型。</p>
+            </div>
+            <div class="card">
+              <h3>Attention：在一堆信息里找重点</h3>
+              <p><b>用处：</b>文本匹配、机器翻译、视觉区域关注、跨模态对齐。</p>
+              <p><b>科研启发：</b>重要证据定位、可解释性、长上下文效率。</p>
+            </div>
+            <div class="card">
+              <h3>Transformer：现代 AI 的通用骨架之一</h3>
+              <p><b>用处：</b>语言模型、视觉 Transformer、推荐序列、蛋白质建模、多模态模型。</p>
+              <p><b>科研启发：</b>结构改造、长序列压缩、预训练任务、领域迁移。</p>
+            </div>
+          </div>
+
+          <div class="diagram">
+            <h3>Attention 权重像“资料重点标注”</h3>
+            <p>颜色越深，表示当前 token 越关注那个位置。多头注意力就像多个专家从不同角度标重点。</p>
+            <div class="matrix" aria-label="注意力权重示意">
+              <span class="cell" style="--v:20"></span><span class="cell" style="--v:35"></span><span class="cell" style="--v:70"></span><span class="cell" style="--v:45"></span><span class="cell" style="--v:18"></span>
+              <span class="cell" style="--v:28"></span><span class="cell" style="--v:82"></span><span class="cell" style="--v:44"></span><span class="cell" style="--v:22"></span><span class="cell" style="--v:56"></span>
+              <span class="cell" style="--v:75"></span><span class="cell" style="--v:40"></span><span class="cell" style="--v:90"></span><span class="cell" style="--v:31"></span><span class="cell" style="--v:25"></span>
+              <span class="cell" style="--v:33"></span><span class="cell" style="--v:48"></span><span class="cell" style="--v:27"></span><span class="cell" style="--v:86"></span><span class="cell" style="--v:62"></span>
+              <span class="cell" style="--v:19"></span><span class="cell" style="--v:51"></span><span class="cell" style="--v:37"></span><span class="cell" style="--v:66"></span><span class="cell" style="--v:93"></span>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>2026 版能力</th>
+                  <th>现在是什么</th>
+                  <th>为什么用</th>
+                  <th>科研启发</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Embedding</td>
+                  <td>把文本、图片、用户、商品变成向量</td>
+                  <td>向量相似度能做检索、推荐、聚类和 RAG</td>
+                  <td>表征质量、跨域泛化、相似度偏差</td>
+                </tr>
+                <tr>
+                  <td>RAG</td>
+                  <td>先检索外部知识，再让模型生成答案</td>
+                  <td>降低幻觉，能引用资料，适合企业知识库和论文助手</td>
+                  <td>检索质量、引用可信度、事实一致性、版本变化</td>
+                </tr>
+                <tr>
+                  <td>Agent</td>
+                  <td>模型做任务规划并调用工具</td>
+                  <td>适合数据分析、代码修复、自动流程和科研助手</td>
+                  <td>任务分解、工具可靠性、执行评测、安全边界</td>
+                </tr>
+                <tr>
+                  <td>LoRA / QLoRA</td>
+                  <td>参数高效微调方法</td>
+                  <td>不用更新全部大模型参数，显存和成本更低</td>
+                  <td>领域适配、小样本泛化、量化误差、模块选择</td>
+                </tr>
+                <tr>
+                  <td>多模态</td>
+                  <td>同时处理文本、图像、音频、视频等信息</td>
+                  <td>真实任务往往不是单一文本或单一图片</td>
+                  <td>跨模态对齐、弱监督标注、细粒度解释</td>
+                </tr>
+                <tr>
+                  <td>扩散模型</td>
+                  <td>生成式视觉的重要范式</td>
+                  <td>能做图像生成、数据合成、修复和增强</td>
+                  <td>可控生成、合成数据有效性、生成质量评估</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="lesson">
+            <h3>Transformer、RAG、Agent：现代 AI 的三条主线</h3>
+            <p>如果说经典机器学习回答的是“如何从特征到预测”，深度学习回答的是“如何自动学习表示”，那么 2026 年的现代 AI 还多了三个问题：如何利用大规模预训练知识，如何接入外部知识，如何让模型调用工具完成任务。</p>
+            <h4>Transformer 为什么成了基础架构</h4>
+            <p>Transformer 的核心是自注意力。它让序列里的每个位置都能直接看其他位置，从而建模长距离关系。RNN 处理长文本时信息要一步步传，远处信息容易衰减；Transformer 可以并行计算所有位置之间的关系，因此更适合大规模训练。多头注意力相当于多个视角：有的头看语法，有的头看实体，有的头看远距离依赖。</p>
+            <h4>预训练与微调：先读万卷书，再做专项训练</h4>
+            <p>预训练模型先在大规模数据上学习通用表示，再在具体任务上微调。BERT、GPT、ViT 等都遵循这个思路。对研究生来说，关键不是“我能不能从零训练一个大模型”，而是能不能合理使用预训练模型，设计任务数据、损失函数、评估指标和消融实验。</p>
+            <h4>RAG：让模型回答前先查资料</h4>
+            <p>RAG 的流程通常是：把文档切块，转成 Embedding，存入向量数据库；用户提问时，先检索相关片段，再把片段和问题一起交给大模型生成答案。它适合企业知识库、论文问答、法律条款、客服手册等知识密集场景。RAG 不是把所有文档塞进 prompt，而是把“找资料”和“组织语言”拆开。</p>
+            <p><b>RAG 常见失败：</b>切块太碎导致上下文不完整；Embedding 模型不适合领域术语；检索召回了无关段落；生成答案没有忠实引用；文档版本更新后索引没同步。科研上可以研究检索质量、重排序、引用一致性、长文档问答和事实性评估。</p>
+            <h4>Agent：模型从回答问题走向执行任务</h4>
+            <p>Agent 不是一个神秘物种，本质是“模型 + 任务规划 + 工具调用 + 记忆/状态 + 结果检查”。比如科研 Agent 可以读 CSV、画图、跑统计检验、写实验摘要；代码 Agent 可以定位 bug、修改文件、运行测试。Agent 的难点不是让模型说得漂亮，而是让它每一步都可验证、可回滚、可控。</p>
+            <h4>LoRA / QLoRA：低成本适配大模型</h4>
+            <p>全量微调大模型成本很高，LoRA 的思路是冻结原模型，只在部分权重旁边加低秩适配矩阵，让模型用少量参数学习新任务。QLoRA 进一步结合量化，降低显存占用。它适合领域文本分类、专业问答、风格适配等场景，但如果数据质量差，LoRA 也只会更快地学坏。</p>
+            <h4>多模态与扩散模型：从文本走向世界</h4>
+            <p>多模态模型把文本、图像、音频、视频放进同一个语义空间，适合图文检索、视觉问答、医学影像报告和工业巡检。扩散模型则是生成图像的重要路线，可以做图像生成、修复、增强和合成数据。科研中要小心：合成数据看起来像真的，不代表对下游任务一定有帮助，必须用实验验证。</p>
+          </div>
+        </section>
+
+        <section class="chapter" id="scenarios" data-title="实际需求 场景地图 业务 科研">
+          <div class="chapter-header">
+            <div>
+              <h2>08. 实际需求与场景地图</h2>
+              <p class="chapter-lead">学算法不是为了收藏名字，而是为了看到一个真实问题时知道怎么拆、用什么、怎么评估。</p>
+            </div>
+            <label class="progress"><input type="checkbox" data-progress="scenarios"> 已学</label>
+          </div>
+
+          <div class="grid cols-2">
+            <div class="scenario-card">
+              <h3>结构化数据：风控评分</h3>
+              <p><b>输入：</b>用户画像、交易记录、信用历史。<b>输出：</b>违约或欺诈风险。</p>
+              <p><b>推荐算法：</b>逻辑回归、随机森林、LightGBM、校准模型。</p>
+              <p><b>指标：</b>AUC、KS、Recall、坏账率、误杀率。</p>
+              <p><b>科研方向：</b>类别不平衡、可解释风控、分布偏移、隐私保护学习。</p>
+            </div>
+            <div class="scenario-card">
+              <h3>计算机视觉：工业缺陷检测</h3>
+              <p><b>输入：</b>产线图片或视频。<b>输出：</b>是否有缺陷、缺陷位置。</p>
+              <p><b>推荐算法：</b>CNN、Vision Transformer、异常检测、弱监督分割。</p>
+              <p><b>指标：</b>Precision、Recall、mAP、IoU、漏检率。</p>
+              <p><b>科研方向：</b>小样本、合成数据、跨设备泛化、可解释定位。</p>
+            </div>
+            <div class="scenario-card">
+              <h3>NLP：论文文本分类与信息抽取</h3>
+              <p><b>输入：</b>标题、摘要、正文。<b>输出：</b>主题类别、方法实体、数据集和指标。</p>
+              <p><b>推荐算法：</b>TF-IDF + 线性模型、BERT、长文本 Transformer、RAG。</p>
+              <p><b>指标：</b>F1、Exact Match、人工一致性。</p>
+              <p><b>科研方向：</b>长文档理解、领域迁移、引用关系建模。</p>
+            </div>
+            <div class="scenario-card">
+              <h3>大模型应用：企业知识库问答</h3>
+              <p><b>输入：</b>内部文档和用户问题。<b>输出：</b>带引用的回答。</p>
+              <p><b>推荐算法：</b>Embedding、向量检索、RAG、重排序、答案评测。</p>
+              <p><b>指标：</b>检索召回、答案事实性、引用命中率、响应延迟。</p>
+              <p><b>科研方向：</b>RAG 评测、幻觉抑制、版本感知检索、多跳问答。</p>
+            </div>
+            <div class="scenario-card">
+              <h3>科研数据：材料性能预测</h3>
+              <p><b>输入：</b>成分、结构、工艺参数。<b>输出：</b>强度、导电性、稳定性。</p>
+              <p><b>推荐算法：</b>线性回归、GBDT、图神经网络、主动学习。</p>
+              <p><b>指标：</b>MAE、RMSE、Top-K 命中率、实验验证成功率。</p>
+              <p><b>科研方向：</b>小样本、高成本实验、可解释特征、主动采样。</p>
+            </div>
+            <div class="scenario-card">
+              <h3>推荐系统：召回与排序</h3>
+              <p><b>输入：</b>用户行为、商品内容、上下文。<b>输出：</b>候选列表和排序分数。</p>
+              <p><b>推荐算法：</b>协同过滤、双塔模型、GBDT 排序、序列推荐、Embedding 检索。</p>
+              <p><b>指标：</b>NDCG、Recall@K、CTR、转化率、留存。</p>
+              <p><b>科研方向：</b>冷启动、公平性、长期收益、反馈回路。</p>
+            </div>
+          </div>
+
+          <div class="lesson">
+            <h3>从真实需求到模型方案：一套通用思考流程</h3>
+            <p>实际项目不是先选 Transformer，也不是先打开 PyTorch，而是先把需求翻译成机器学习问题。这个翻译能力很重要，因为它决定你做出来的是“能用的系统”，还是“看起来很 AI 的演示”。</p>
+            <h4>第一步：确认决策对象</h4>
+            <p>你要预测的是一个用户、一张图片、一篇论文、一段时间序列，还是一次对话？决策对象不同，样本定义就不同。比如用户流失预测的样本是“某个用户在某个时间窗口的行为”，而不是用户表里随便一行。</p>
+            <h4>第二步：确认输出形式</h4>
+            <p>输出可以是类别、数值、排序、聚类、文本答案、检测框、分割掩码、异常分数。输出形式决定模型和指标。比如“找出最可能流失的 1000 个用户”更像排序问题，而不只是二分类问题。</p>
+            <h4>第三步：确认错误代价</h4>
+            <p>医学筛查漏掉患者和误报患者的代价不一样；风控放过欺诈和误杀正常用户的代价不一样；RAG 答案不完整和编造引用的代价也不一样。错误代价决定指标、阈值和产品策略。</p>
+            <h4>第四步：从简单 baseline 开始</h4>
+            <p>不要一开始就堆复杂模型。表格数据先试逻辑回归、随机森林、LightGBM；文本先试 TF-IDF + 线性模型和预训练模型；图像先试迁移学习；RAG 先把切块、检索、重排序和引用链路跑通。baseline 能帮你发现问题到底在数据、模型还是评估。</p>
+            <h4>第五步：把项目升级成科研问题</h4>
+            <p>如果 baseline 在大多数样本上好，但在少数场景失败，你可以研究鲁棒性和长尾问题；如果跨数据集表现下降，你可以研究领域自适应；如果模型准但无法解释，你可以研究可解释性；如果 RAG 常引用错误，你可以研究事实性评估和引用约束。</p>
+          </div>
+        </section>
+
+        <section class="chapter" id="training" data-title="训练 调参 实验 消融 错误分析">
+          <div class="chapter-header">
+            <div>
+              <h2>09. 训练、调参和实验方法</h2>
+              <p class="chapter-lead">会训练模型只是第一步。研究生和工程师真正要会的是：证明模型为什么有效，以及失败时怎么查。</p>
+            </div>
+            <label class="progress"><input type="checkbox" data-progress="training"> 已学</label>
+          </div>
+
+          <div class="grid cols-3">
+            <div class="card">
+              <h3>数据处理</h3>
+              <p>清洗缺失值、异常值；标准化数值特征；处理类别不平衡；划分训练/验证/测试集；确认标签质量。</p>
+            </div>
+            <div class="card">
+              <h3>调参重点</h3>
+              <p>学习率、batch size、网络深度、正则化、weight decay、dropout、scheduler、早停。</p>
+            </div>
+            <div class="card">
+              <h3>实验管理</h3>
+              <p>固定随机种子，记录超参数，保存 checkpoint，画 loss 曲线，多次运行报告均值和方差。</p>
+            </div>
+          </div>
+
+          <details open>
+            <summary>消融实验：证明每个模块不是摆设</summary>
+            <div>
+              <p>如果你论文里提出了一个模块 A，就要比较“完整模型”和“去掉 A 的模型”。如果性能明显下降，说明 A 有贡献；如果没变化，说明这个模块可能只是装饰。面试项目也一样，面试官会问：你加的优化到底有没有用？</p>
+            </div>
+          </details>
+
+          <details>
+            <summary>错误分析：论文创新经常从错例里长出来</summary>
+            <div>
+              <p>把预测错的样本拿出来看：是不是某类样本少？是不是标注噪声？是不是长尾类别？是不是训练集没有覆盖真实场景？这些错例能变成研究动机，比如小样本学习、鲁棒学习、领域自适应、异常检测。</p>
+            </div>
+          </details>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>现象</th>
+                  <th>可能原因</th>
+                  <th>下一步</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>训练集和验证集都差</td>
+                  <td>欠拟合、特征弱、模型太简单</td>
+                  <td>加特征、换模型、训练更久、检查标签</td>
+                </tr>
+                <tr>
+                  <td>训练集好，验证集差</td>
+                  <td>过拟合</td>
+                  <td>正则化、数据增强、早停、减小模型、加数据</td>
+                </tr>
+                <tr>
+                  <td>离线好，线上差</td>
+                  <td>分布偏移、数据泄漏、指标不一致</td>
+                  <td>重做数据切分，监控线上数据，做时间切分评估</td>
+                </tr>
+                <tr>
+                  <td>指标高但业务不满意</td>
+                  <td>指标选错、类别不均衡、错例代价不同</td>
+                  <td>换指标，按业务代价设置阈值，做错例分析</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="lesson">
+            <h3>一套完整实验应该怎么做</h3>
+            <p>研究生写论文和大厂做项目都不能只交一个“最终准确率”。一个可信实验要能回答：数据从哪来，怎么处理，baseline 是什么，模型怎么训练，调了哪些参数，结果是否稳定，提升来自哪里，失败样本是什么。</p>
+            <h4>1. 数据阶段：先防止结果虚高</h4>
+            <p>划分数据时要考虑任务真实发生方式。时间序列任务不能随机打乱后切分，否则未来信息会泄漏到训练集；同一个用户的多条记录如果同时出现在训练和测试，也可能导致模型记住用户；医学影像里同一患者的多张图不能分到不同集合。数据划分错误，是很多“高分模型”无法上线的根源。</p>
+            <h4>2. Baseline 阶段：先建立可信起点</h4>
+            <p>baseline 不一定弱。表格数据可以从逻辑回归、随机森林、LightGBM 开始；图像任务可以从预训练 ResNet 或 ViT 开始；文本任务可以从 TF-IDF + 线性模型和 BERT 微调开始；RAG 任务可以从 BM25、Embedding 检索、重排序逐步加。没有 baseline，就无法证明你的方法有贡献。</p>
+            <h4>3. 训练阶段：记录比“感觉”可靠</h4>
+            <p>每次实验都记录随机种子、数据版本、模型版本、超参数、训练轮数、最佳 checkpoint、验证集指标、测试集指标。最好画训练/验证 loss 曲线。曲线比单个数字更有信息：它能告诉你模型是否还在学习、是否过拟合、是否学习率太大。</p>
+            <h4>4. 消融阶段：把贡献拆开证明</h4>
+            <p>如果你加了数据增强、注意力模块、新损失函数、重排序器，就要分别去掉它们，看性能变化。消融表里最有价值的不是“完整模型最高”，而是每个模块的作用能被解释。面试官也会追问：你的提升到底来自模型结构、数据处理、调参，还是只是训练更久？</p>
+            <h4>5. 错误分析阶段：从失败里找下一篇论文</h4>
+            <p>把错例按类型分组：长尾类别、低质量图片、歧义文本、领域术语、噪声标签、跨域样本、极端场景。每一类错误都可能对应一个研究方向。比如 RAG 答错可能不是生成模型差，而是检索没召回；医学影像错例可能集中在某家医院设备，说明存在域偏移。</p>
+          </div>
+        </section>
+
+        <section class="chapter" id="research" data-title="科研启发 论文选题 实验设计 创新点">
+          <div class="chapter-header">
+            <div>
+              <h2>10. 科研启发与论文选题</h2>
+              <p class="chapter-lead">科研不是凭空想一个“新模块”，而是从真实失败、算法边界、数据限制和实验现象中找到问题。</p>
+            </div>
+            <label class="progress"><input type="checkbox" data-progress="research"> 已学</label>
+          </div>
+
+          <div class="grid cols-2">
+            <div class="card">
+              <h3>从实际需求找问题</h3>
+              <p>现有模型在哪些场景失败？哪些类别表现差？训练数据和真实数据是否不同？模型是否太慢、太大、太难解释？</p>
+            </div>
+            <div class="card">
+              <h3>从算法缺点找问题</h3>
+              <p>线性模型表达弱，树模型难处理复杂文本，CNN 全局关系弱，RNN 长依赖困难，大模型容易幻觉。这些缺点就是选题入口。</p>
+            </div>
+            <div class="card">
+              <h3>从实验现象找问题</h3>
+              <p>换数据集是否还有效？小样本是否有效？噪声标签是否稳定？缺少某类特征时是否鲁棒？计算量是否值得？</p>
+            </div>
+            <div class="card">
+              <h3>从论文贡献组织问题</h3>
+              <p>新任务、新方法、新数据、新分析、新系统都可以是贡献，但必须能被实验验证，不是只换一个名字。</p>
+            </div>
+          </div>
+
+          <div class="callout research">
+            <strong>选题句式：</strong>在真实场景 X 中，现有方法 Y 因为 Z 表现不稳定。我们提出 A，通过 B 机制改善 C，并在 D 数据集上用 E 指标和消融实验证明有效。
+          </div>
+        </section>
+
+        <section class="chapter" id="paper" data-title="论文阅读 写作 Abstract Method Experiments Ablation">
+          <div class="chapter-header">
+            <div>
+              <h2>11. 论文阅读与写作</h2>
+              <p class="chapter-lead">读论文不是逐字翻译，而是抓住问题、方法、证据和局限。</p>
+            </div>
+            <label class="progress"><input type="checkbox" data-progress="paper"> 已学</label>
+          </div>
+
+          <div class="grid cols-3">
+            <div class="card">
+              <h3>第一遍：抓骨架</h3>
+              <p>看标题、摘要、图、结论。回答：它解决什么问题？比谁好？好在哪里？</p>
+            </div>
+            <div class="card">
+              <h3>第二遍：看方法</h3>
+              <p>看模型结构、损失函数、训练数据、关键假设。画出输入、模块、输出和损失。</p>
+            </div>
+            <div class="card">
+              <h3>第三遍：看证据</h3>
+              <p>看 baseline、指标、主结果、消融、可视化、失败案例和局限性。</p>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>论文部分</th>
+                  <th>要回答的问题</th>
+                  <th>写作提醒</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Abstract</td>
+                  <td>问题、方法、结果、意义</td>
+                  <td>不要堆背景，要让读者一眼知道贡献。</td>
+                </tr>
+                <tr>
+                  <td>Introduction</td>
+                  <td>为什么这个问题重要，现有方法缺什么</td>
+                  <td>用真实需求和失败案例引出动机。</td>
+                </tr>
+                <tr>
+                  <td>Method</td>
+                  <td>你到底提出了什么</td>
+                  <td>模块、公式、训练目标、复杂度要说清。</td>
+                </tr>
+                <tr>
+                  <td>Experiments</td>
+                  <td>怎么证明有效</td>
+                  <td>数据集、baseline、指标、实现细节、消融缺一不可。</td>
+                </tr>
+                <tr>
+                  <td>Ablation</td>
+                  <td>每个贡献是否必要</td>
+                  <td>去掉模块、替换模块、改参数，看性能变化。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="lesson">
+            <h3>把一个项目写成论文：从“我做了模型”到“我证明了问题”</h3>
+            <p>课程项目和论文的区别，不在于模型名字有多高级，而在于你是否提出了清楚的问题，并用严谨实验证明你的方法有效。一个能写论文的项目通常包含：明确任务、强 baseline、合理改进、可靠实验、消融分析、失败案例和局限讨论。</p>
+            <h4>Introduction 怎么写</h4>
+            <p>先讲真实需求：为什么这个任务重要。再讲现有方法：它们解决了什么，但还缺什么。然后讲你的观察：例如小样本场景下模型不稳定，RAG 对版本更新文档容易引用过期内容，医学影像模型跨医院泛化差。最后自然引出你的方法。</p>
+            <h4>Method 怎么写</h4>
+            <p>方法部分要让别人能复现。不要只写“我们引入注意力机制”，而要说清输入是什么、模块怎么计算、输出是什么、损失函数怎么定义、训练流程怎么走。如果有多个模块，最好画一张流程图，并解释每个模块对应哪个问题。</p>
+            <h4>Experiments 怎么写</h4>
+            <p>实验部分要回答四个问题：和谁比，在哪比，用什么指标比，为什么可信。baseline 要足够强；数据集要说明规模、划分、标签和预处理；指标要符合任务目标；实现细节要包括模型、学习率、batch size、训练轮数、硬件或主要环境。</p>
+            <h4>Ablation 怎么写</h4>
+            <p>消融实验不是凑表格，而是验证你的贡献。去掉新模块、替换关键设计、改变超参数、换数据集，都可以帮助读者理解方法为什么有效。好的消融能让审稿人相信：提升不是偶然，也不是调参堆出来的。</p>
+            <h4>Conclusion 和 Limitation 怎么写</h4>
+            <p>结论要克制，说明你解决了什么、结果如何、意义是什么。局限不是自我否定，而是科研诚实：数据规模有限、只验证了某些领域、推理成本较高、对噪声敏感。这些局限也能成为后续工作。</p>
+          </div>
+        </section>
+
+        <section class="chapter" id="interview" data-title="大厂面试 高频问题 项目表达">
+          <div class="chapter-header">
+            <div>
+              <h2>12. 大厂求职与面试</h2>
+              <p class="chapter-lead">面试不是背标准答案，而是证明你知道“为什么选这个模型、怎么验证有效、失败怎么排查”。</p>
+            </div>
+            <label class="progress"><input type="checkbox" data-progress="interview"> 已学</label>
+          </div>
+
+          <div class="callout">
+            <strong>项目表达模板：</strong>背景：解决什么问题；方法：用了什么模型；难点：数据、训练、指标或工程难点；优化：做了哪些改进；结果：指标提升多少；复盘：为什么有效，失败案例是什么。
+          </div>
+
+          <div class="grid cols-2">
+            <details>
+              <summary>1. 过拟合怎么解决？</summary>
+              <div>加数据、数据增强、正则化、Dropout、Early Stopping、减小模型、交叉验证。加分点是先看学习曲线，判断是不是数据不足或模型过强。</div>
+            </details>
+            <details>
+              <summary>2. 为什么要划分验证集？</summary>
+              <div>验证集用于模型选择和调参，测试集用于最后评估。没有验证集，就容易把测试集调成“训练的一部分”。</div>
+            </details>
+            <details>
+              <summary>3. 逻辑回归和线性回归区别？</summary>
+              <div>线性回归预测连续值，用 MSE 等回归损失；逻辑回归输出概率，常用于分类，用交叉熵或极大似然训练。</div>
+            </details>
+            <details>
+              <summary>4. 决策树、随机森林、GBDT 区别？</summary>
+              <div>决策树单模型可解释但易过拟合；随机森林并行训练多棵树降低方差；GBDT 串行训练，每棵树修正前面错误，通常表格数据更强。</div>
+            </details>
+            <details>
+              <summary>5. BatchNorm 和 LayerNorm 区别？</summary>
+              <div>BatchNorm 主要沿 batch 统计，常见于 CNN；LayerNorm 对单样本内部特征归一化，常见于 Transformer，对 batch size 不敏感。</div>
+            </details>
+            <details>
+              <summary>6. Dropout 为什么有效？</summary>
+              <div>训练时随机丢弃部分神经元，降低共同适应，类似训练多个子网络，提升泛化。</div>
+            </details>
+            <details>
+              <summary>7. Adam 和 SGD 区别？</summary>
+              <div>SGD 简单直接，可能泛化好但调参敏感；Adam 自适应学习率，收敛快。AdamW 改善权重衰减处理，是很多深度模型常用选择。</div>
+            </details>
+            <details>
+              <summary>8. Transformer 为什么有效？</summary>
+              <div>自注意力能建模全局依赖，多头机制从不同子空间看关系，并行性好，预训练和迁移能力强。</div>
+            </details>
+            <details>
+              <summary>9. Attention 的 Q/K/V 是什么？</summary>
+              <div>Query 是“我想找什么”，Key 是“我有什么标签”，Value 是“真正取走的信息”。Q 与 K 算相似度，再对 V 加权求和。</div>
+            </details>
+            <details>
+              <summary>10. 如何做消融实验？</summary>
+              <div>去掉或替换一个模块，保持其他设置不变，对比指标变化；还可以做参数敏感性、复杂度和不同数据集验证。</div>
+            </details>
+            <details>
+              <summary>11. 类别不平衡怎么办？</summary>
+              <div>重采样、类别权重、Focal Loss、阈值调整、使用 PR-AUC/F1/Recall 等更合适指标，并结合业务代价。</div>
+            </details>
+            <details>
+              <summary>12. RAG 为什么能减少幻觉？</summary>
+              <div>因为回答前先检索外部知识，把生成过程约束在相关资料上。但如果检索差或引用不准，仍然会产生错误答案。</div>
+            </details>
+            <details>
+              <summary>13. LoRA 的直觉是什么？</summary>
+              <div>冻结大模型主体，只训练低秩适配矩阵，用少量参数学习领域变化，节省显存和训练成本。</div>
+            </details>
+            <details>
+              <summary>14. 线上效果比离线差怎么办？</summary>
+              <div>检查数据泄漏、分布偏移、特征实时性、指标不一致、样本延迟、线上日志和阈值策略。</div>
+            </details>
+            <details>
+              <summary>15. 怎么讲一个项目的难点？</summary>
+              <div>不要只说“用了模型”。要讲数据难点、指标选择、baseline、错例、优化、消融、部署成本和复盘。</div>
+            </details>
+            <details>
+              <summary>16. 为什么 LightGBM 在表格数据上常很强？</summary>
+              <div>它能高效处理非线性、特征交互、缺失值和不同尺度特征，训练快、调参成熟，在结构化业务数据上常比深度模型更稳。</div>
+            </details>
+            <details>
+              <summary>17. 什么时候不用深度学习？</summary>
+              <div>数据很少、特征结构清楚、解释性要求高、延迟和成本严格时，线性模型、树模型或规则系统可能更合适。</div>
+            </details>
+            <details>
+              <summary>18. 如何判断模型欠拟合还是过拟合？</summary>
+              <div>看训练集和验证集曲线：两者都差多半欠拟合；训练好验证差多半过拟合；训练不稳定要看学习率、数据和梯度。</div>
+            </details>
+            <details>
+              <summary>19. 为什么要固定随机种子？</summary>
+              <div>为了提升实验可复现性。深度学习训练、数据切分、初始化和采样都有随机性，论文最好报告多次运行均值和方差。</div>
+            </details>
+            <details>
+              <summary>20. 什么是数据泄漏？</summary>
+              <div>训练时使用了真实预测时拿不到的信息，比如把未来信息、测试集统计量或标签相关字段放进特征，会导致离线分数虚高。</div>
+            </details>
+            <details>
+              <summary>21. 为什么验证集调参后还要测试集？</summary>
+              <div>验证集已经参与模型选择，性能会被乐观估计；测试集保留给最终评估，模拟未知数据表现。</div>
+            </details>
+            <details>
+              <summary>22. CNN 的卷积核在学什么？</summary>
+              <div>低层可能学边缘、纹理和局部形状，高层组合成更抽象的目标部件或语义模式。</div>
+            </details>
+            <details>
+              <summary>23. 为什么 Transformer 需要位置编码？</summary>
+              <div>自注意力本身不天然知道 token 顺序，位置编码给模型提供序列位置信息。</div>
+            </details>
+            <details>
+              <summary>24. 什么是梯度消失和梯度爆炸？</summary>
+              <div>反向传播时梯度在多层中变得极小或极大，导致学不动或训练崩溃。可用归一化、残差连接、合适初始化和梯度裁剪缓解。</div>
+            </details>
+            <details>
+              <summary>25. 为什么残差连接有效？</summary>
+              <div>它给信息和梯度提供更直接的通路，缓解深层网络训练困难，让模型学“增量修正”而不是每层重学全部变换。</div>
+            </details>
+            <details>
+              <summary>26. Embedding 好坏怎么评估？</summary>
+              <div>看下游任务表现、近邻检索质量、聚类可分性、可视化、人工评估，以及是否存在偏见或领域漂移。</div>
+            </details>
+            <details>
+              <summary>27. RAG 系统该怎么评测？</summary>
+              <div>分开看检索和生成：检索看 Recall@K、MRR、引用命中；生成看事实性、完整性、引用一致性、人工偏好和延迟成本。</div>
+            </details>
+            <details>
+              <summary>28. Agent 最容易出什么问题？</summary>
+              <div>计划错误、工具调用参数错、执行结果不验证、循环卡住、权限过大。要加任务边界、日志、检查点和可回滚机制。</div>
+            </details>
+            <details>
+              <summary>29. LoRA 和全量微调怎么取舍？</summary>
+              <div>LoRA 成本低、适合多领域适配和资源有限场景；全量微调自由度更高但成本大、风险高。要看数据量、算力、目标和部署方式。</div>
+            </details>
+            <details>
+              <summary>30. 论文里的 baseline 应该怎么选？</summary>
+              <div>至少包括经典强方法、当前主流方法和与你最接近的方法。baseline 不能刻意选弱，否则贡献不可信。</div>
+            </details>
+          </div>
+        </section>
+
+        <section class="chapter" id="projects" data-title="项目路线 简历 科研升级">
+          <div class="chapter-header">
+            <div>
+              <h2>13. 项目路线</h2>
+              <p class="chapter-lead">项目要由浅入深：先做得出来，再讲得清楚，最后升级成科研问题。</p>
+            </div>
+            <label class="progress"><input type="checkbox" data-progress="projects"> 已学</label>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>项目</th>
+                  <th>核心能力</th>
+                  <th>简历表达</th>
+                  <th>科研升级</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>房价预测</td>
+                  <td>回归、特征工程、误差分析</td>
+                  <td>构建回归模型预测价格，并分析关键影响因素</td>
+                  <td>空间位置特征、时间趋势、可解释回归</td>
+                </tr>
+                <tr>
+                  <td>用户流失预测</td>
+                  <td>分类、类别不平衡、阈值选择</td>
+                  <td>识别高风险用户，提升召回并控制误报</td>
+                  <td>代价敏感学习、可解释风控、分布偏移</td>
+                </tr>
+                <tr>
+                  <td>表格竞赛 LightGBM</td>
+                  <td>结构化数据、交叉验证、调参</td>
+                  <td>搭建强 baseline，完成特征筛选和模型融合</td>
+                  <td>树模型蒸馏、表格深度学习、自动特征工程</td>
+                </tr>
+                <tr>
+                  <td>CNN 图像分类</td>
+                  <td>数据增强、迁移学习、混淆矩阵</td>
+                  <td>完成图像分类训练和错例分析</td>
+                  <td>小样本视觉、可解释热力图、域泛化</td>
+                </tr>
+                <tr>
+                  <td>文本情感分析</td>
+                  <td>BERT 微调、文本清洗、F1 指标</td>
+                  <td>构建文本分类模型用于舆情分析</td>
+                  <td>领域迁移、讽刺识别、多语言鲁棒性</td>
+                </tr>
+                <tr>
+                  <td>RAG 论文问答</td>
+                  <td>Embedding、向量检索、重排序、引用</td>
+                  <td>构建带引用的论文知识库问答系统</td>
+                  <td>检索质量评估、幻觉抑制、长文档理解</td>
+                </tr>
+                <tr>
+                  <td>Agent 数据分析助手</td>
+                  <td>工具调用、任务规划、结果验证</td>
+                  <td>实现自动读取数据、生成图表和分析报告</td>
+                  <td>工具可靠性评估、安全执行、任务分解</td>
+                </tr>
+                <tr>
+                  <td>时间序列异常检测</td>
+                  <td>滑动窗口、统计特征、LSTM/Transformer</td>
+                  <td>识别设备或业务指标异常并生成告警</td>
+                  <td>早期预警、概念漂移、异常解释</td>
+                </tr>
+                <tr>
+                  <td>医学影像辅助诊断</td>
+                  <td>迁移学习、类别不平衡、可解释热力图</td>
+                  <td>训练模型识别病灶并输出可视化证据</td>
+                  <td>小样本学习、医生反馈闭环、跨医院泛化</td>
+                </tr>
+                <tr>
+                  <td>多模态图文检索</td>
+                  <td>图像编码器、文本编码器、对比学习</td>
+                  <td>实现以文搜图或以图搜文的检索系统</td>
+                  <td>跨模态对齐、细粒度检索、偏见分析</td>
+                </tr>
+                <tr>
+                  <td>合成数据增强</td>
+                  <td>扩散模型、数据筛选、质量评估</td>
+                  <td>为少样本类别生成补充样本并验证效果</td>
+                  <td>合成数据有效性、分布偏差、生成质量评估</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="chapter" id="plan" data-title="12周学习计划">
+          <div class="chapter-header">
+            <div>
+              <h2>14. 12 周学习计划</h2>
+              <p class="chapter-lead">每周都要有产出：图、代码、实验记录、论文笔记或项目复盘。</p>
+            </div>
+            <label class="progress"><input type="checkbox" data-progress="plan"> 已学</label>
+          </div>
+
+          <div class="timeline">
+            <div class="week"><div class="week-num">第 1 周</div><div><h3>全景与数学最小基础</h3><p>画出数据、模型、损失、优化闭环；补向量、矩阵、导数、概率。</p></div></div>
+            <div class="week"><div class="week-num">第 2 周</div><div><h3>回归、分类、评价指标</h3><p>完成线性回归和逻辑回归实验，理解 Accuracy、F1、AUC、MSE。</p></div></div>
+            <div class="week"><div class="week-num">第 3 周</div><div><h3>树模型和结构化数据</h3><p>完成随机森林和 LightGBM 项目，做特征重要性和交叉验证。</p></div></div>
+            <div class="week"><div class="week-num">第 4 周</div><div><h3>聚类、降维和无监督学习</h3><p>用 K-Means 和 PCA 做数据探索，写一页可视化分析。</p></div></div>
+            <div class="week"><div class="week-num">第 5 周</div><div><h3>神经网络与反向传播</h3><p>手写一个小 MLP，理解 loss.backward() 到底在做什么。</p></div></div>
+            <div class="week"><div class="week-num">第 6 周</div><div><h3>PyTorch 训练流程</h3><p>掌握 Dataset、DataLoader、训练循环、验证、保存模型。</p></div></div>
+            <div class="week"><div class="week-num">第 7 周</div><div><h3>CNN 与图像任务</h3><p>做图像分类，画混淆矩阵和错例，尝试数据增强。</p></div></div>
+            <div class="week"><div class="week-num">第 8 周</div><div><h3>Attention 与 Transformer</h3><p>理解 Q/K/V、多头注意力、位置编码，读一篇 Transformer 相关论文。</p></div></div>
+            <div class="week"><div class="week-num">第 9 周</div><div><h3>预训练、微调和自监督</h3><p>完成一个文本分类微调实验，比较冻结与全量微调。</p></div></div>
+            <div class="week"><div class="week-num">第 10 周</div><div><h3>RAG、Embedding 与评测</h3><p>做一个小型论文问答系统，评估检索命中率和答案事实性。</p></div></div>
+            <div class="week"><div class="week-num">第 11 周</div><div><h3>论文阅读和复现</h3><p>选一篇小论文，整理方法图、实验表、消融和局限。</p></div></div>
+            <div class="week"><div class="week-num">第 12 周</div><div><h3>项目包装与面试复盘</h3><p>把一个项目写成简历 bullet、论文式报告和 3 分钟讲稿。</p></div></div>
+          </div>
+        </section>
+
+        <section class="chapter" id="glossary" data-title="术语表 速查 公式">
+          <div class="chapter-header">
+            <div>
+              <h2>15. 术语表与速查表</h2>
+              <p class="chapter-lead">遇到论文和面试里的关键词，先把它放回任务、数据、模型、损失、优化和评估这六个位置。</p>
+            </div>
+            <label class="progress"><input type="checkbox" data-progress="glossary"> 已学</label>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>术语</th>
+                  <th>英文</th>
+                  <th>一句话解释</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>样本</td><td>Sample</td><td>一条用于训练或评估的数据。</td></tr>
+                <tr><td>特征</td><td>Feature</td><td>描述样本的信息，比如年龄、词向量、像素。</td></tr>
+                <tr><td>标签</td><td>Label</td><td>监督学习中希望模型预测的答案。</td></tr>
+                <tr><td>模型</td><td>Model</td><td>从输入到输出的可学习函数。</td></tr>
+                <tr><td>参数</td><td>Parameter</td><td>模型训练中被更新的权重。</td></tr>
+                <tr><td>超参数</td><td>Hyperparameter</td><td>训练前人为设定的配置，比如学习率。</td></tr>
+                <tr><td>损失函数</td><td>Loss Function</td><td>衡量预测和真实答案差距的函数。</td></tr>
+                <tr><td>梯度</td><td>Gradient</td><td>告诉参数往哪个方向改能让损失下降。</td></tr>
+                <tr><td>学习率</td><td>Learning Rate</td><td>每次参数更新的步子大小。</td></tr>
+                <tr><td>训练集</td><td>Training Set</td><td>用来学习参数的数据。</td></tr>
+                <tr><td>验证集</td><td>Validation Set</td><td>用来调参和选模型的数据。</td></tr>
+                <tr><td>测试集</td><td>Test Set</td><td>最后报告泛化性能的数据。</td></tr>
+                <tr><td>欠拟合</td><td>Underfitting</td><td>模型太弱，训练集也学不好。</td></tr>
+                <tr><td>过拟合</td><td>Overfitting</td><td>模型记住训练集细节，泛化差。</td></tr>
+                <tr><td>泛化</td><td>Generalization</td><td>模型在未见数据上的表现。</td></tr>
+                <tr><td>偏差</td><td>Bias</td><td>模型假设过强导致的系统性错误。</td></tr>
+                <tr><td>方差</td><td>Variance</td><td>模型对数据扰动过于敏感。</td></tr>
+                <tr><td>正则化</td><td>Regularization</td><td>限制模型复杂度以提升泛化。</td></tr>
+                <tr><td>交叉熵</td><td>Cross Entropy</td><td>分类任务常用损失。</td></tr>
+                <tr><td>准确率</td><td>Accuracy</td><td>预测正确的比例。</td></tr>
+                <tr><td>精确率</td><td>Precision</td><td>预测为正的样本里有多少是真的正。</td></tr>
+                <tr><td>召回率</td><td>Recall</td><td>真实为正的样本里找回了多少。</td></tr>
+                <tr><td>F1</td><td>F1 Score</td><td>Precision 和 Recall 的调和平均。</td></tr>
+                <tr><td>AUC</td><td>Area Under Curve</td><td>衡量排序区分能力的指标。</td></tr>
+                <tr><td>批量</td><td>Batch</td><td>一次送入模型的一组样本。</td></tr>
+                <tr><td>轮次</td><td>Epoch</td><td>完整遍历训练集一次。</td></tr>
+                <tr><td>反向传播</td><td>Backpropagation</td><td>沿计算图反推梯度。</td></tr>
+                <tr><td>优化器</td><td>Optimizer</td><td>根据梯度更新参数的方法。</td></tr>
+                <tr><td>Dropout</td><td>Dropout</td><td>随机丢弃神经元的正则化方法。</td></tr>
+                <tr><td>BatchNorm</td><td>Batch Normalization</td><td>按 batch 统计做归一化。</td></tr>
+                <tr><td>LayerNorm</td><td>Layer Normalization</td><td>按单样本特征维度做归一化。</td></tr>
+                <tr><td>卷积</td><td>Convolution</td><td>用局部窗口提取模式。</td></tr>
+                <tr><td>注意力</td><td>Attention</td><td>根据相关性分配信息权重。</td></tr>
+                <tr><td>Transformer</td><td>Transformer</td><td>以自注意力为核心的模型架构。</td></tr>
+                <tr><td>预训练</td><td>Pretraining</td><td>先在大规模数据上学通用能力。</td></tr>
+                <tr><td>微调</td><td>Fine-tuning</td><td>在特定任务或领域上继续训练。</td></tr>
+                <tr><td>Embedding</td><td>Embedding</td><td>把对象映射成向量表示。</td></tr>
+                <tr><td>RAG</td><td>Retrieval-Augmented Generation</td><td>检索外部资料后再生成答案。</td></tr>
+                <tr><td>Agent</td><td>Agent</td><td>能规划步骤并调用工具的模型系统。</td></tr>
+                <tr><td>LoRA</td><td>Low-Rank Adaptation</td><td>低秩参数高效微调方法。</td></tr>
+                <tr><td>量化</td><td>Quantization</td><td>降低数值精度以节省显存和加速推理。</td></tr>
+                <tr><td>蒸馏</td><td>Distillation</td><td>用大模型指导小模型学习。</td></tr>
+                <tr><td>消融实验</td><td>Ablation Study</td><td>去掉模块验证其贡献。</td></tr>
+                <tr><td>Baseline</td><td>Baseline</td><td>用来比较的基础方法。</td></tr>
+                <tr><td>分布偏移</td><td>Distribution Shift</td><td>训练数据和真实数据分布不同。</td></tr>
+                <tr><td>鲁棒性</td><td>Robustness</td><td>面对噪声、扰动或新场景仍稳定。</td></tr>
+                <tr><td>可解释性</td><td>Interpretability</td><td>能说明模型为什么这么预测。</td></tr>
+                <tr><td>多模态</td><td>Multimodal</td><td>同时处理文本、图片、音频等信息。</td></tr>
+                <tr><td>幻觉</td><td>Hallucination</td><td>模型生成看似合理但不真实的内容。</td></tr>
+                <tr><td>向量数据库</td><td>Vector Database</td><td>存储和检索向量表示的系统。</td></tr>
+                <tr><td>重排序</td><td>Reranking</td><td>对初步召回结果重新排序。</td></tr>
+                <tr><td>上下文窗口</td><td>Context Window</td><td>模型一次能处理的输入长度。</td></tr>
+                <tr><td>领域自适应</td><td>Domain Adaptation</td><td>让模型适应新领域数据。</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <details>
+            <summary>参考来源</summary>
+            <div>
+              <ul class="sources">
+                <li><a href="http://www.ai-start.com/ml2014/html/week1.html">吴恩达机器学习中文笔记 ai-start 入口</a>：作为基础入门主线参考。</li>
+                <li><a href="https://github.com/fengdu78/Coursera-ML-AndrewNg-Notes">Coursera-ML-AndrewNg-Notes</a>：作为中文笔记稳定参考。</li>
+                <li><a href="https://cs229.stanford.edu/materials.html-withcomments">Stanford CS229</a>：理论深度参考。</li>
+                <li><a href="https://scikit-learn.org/stable/user_guide.html">scikit-learn User Guide</a>：传统机器学习工程参考。</li>
+                <li><a href="https://docs.pytorch.org/tutorials/">PyTorch Tutorials</a>：深度学习实践参考。</li>
+                <li><a href="https://d2l.ai/">Dive into Deep Learning</a>：系统深度学习教材参考。</li>
+                <li><a href="https://huggingface.co/docs/transformers/model_doc/rag">Hugging Face RAG 文档</a>、<a href="https://huggingface.co/docs/peft/en/developer_guides/lora">PEFT LoRA 文档</a>：现代大模型应用参考。</li>
+                <li><a href="https://mlflow.org/docs/latest/ml/tracking/">MLflow Tracking</a>：实验追踪参考。</li>
+              </ul>
+            </div>
+          </details>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <button class="backtop" id="backTop" aria-label="返回顶部">↑</button>
+
+  <script>
+    const root = document.documentElement;
+    const savedTheme = localStorage.getItem("xy-ml-theme");
+    if (savedTheme) root.dataset.theme = savedTheme;
+
+    document.querySelectorAll(".theme-toggle").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const next = root.dataset.theme === "dark" ? "light" : "dark";
+        root.dataset.theme = next;
+        localStorage.setItem("xy-ml-theme", next);
+      });
+    });
+
+    const sidebar = document.getElementById("sidebar");
+    document.getElementById("mobileMenu").addEventListener("click", () => {
+      sidebar.classList.toggle("open");
+    });
+
+    document.querySelectorAll("#toc a").forEach((link) => {
+      link.addEventListener("click", () => sidebar.classList.remove("open"));
+    });
+
+    const tocLinks = [...document.querySelectorAll("#toc a")];
+    const sections = tocLinks
+      .map((a) => document.querySelector(a.getAttribute("href")))
+      .filter(Boolean);
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const id = entry.target.id;
+        tocLinks.forEach((a) => {
+          a.classList.toggle("active", a.getAttribute("href") === "#" + id);
+        });
+      });
+    }, { rootMargin: "-20% 0px -70% 0px", threshold: 0.01 });
+
+    sections.forEach((section) => observer.observe(section));
+
+    document.getElementById("navSearch").addEventListener("input", (event) => {
+      const q = event.target.value.trim().toLowerCase();
+      tocLinks.forEach((link) => {
+        const target = document.querySelector(link.getAttribute("href"));
+        const hay = (link.textContent + " " + (target?.dataset.title || "")).toLowerCase();
+        link.classList.toggle("hidden", q && !hay.includes(q));
+      });
+    });
+
+    document.querySelectorAll("pre").forEach((pre) => {
+      const box = pre.parentElement;
+      const btn = document.createElement("button");
+      btn.className = "copy-btn";
+      btn.type = "button";
+      btn.textContent = "复制";
+      btn.addEventListener("click", async () => {
+        await navigator.clipboard.writeText(pre.innerText);
+        btn.textContent = "已复制";
+        setTimeout(() => btn.textContent = "复制", 1200);
+      });
+      box.appendChild(btn);
+    });
+
+    document.querySelectorAll("[data-progress]").forEach((input) => {
+      const key = "xy-ml-progress-" + input.dataset.progress;
+      input.checked = localStorage.getItem(key) === "1";
+      input.addEventListener("change", () => {
+        localStorage.setItem(key, input.checked ? "1" : "0");
+      });
+    });
+
+    document.getElementById("expandAll").addEventListener("click", () => {
+      document.querySelectorAll("details").forEach((d) => d.open = true);
+    });
+
+    document.getElementById("collapseAll").addEventListener("click", () => {
+      document.querySelectorAll("details").forEach((d) => d.open = false);
+    });
+
+    document.getElementById("backTop").addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>
